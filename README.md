@@ -102,6 +102,9 @@ app.post('/robokassa/callback', function (req, res) {
 Feel free to browse the source code for more options and API explanation.
 It should be very easy to read, I promise.
 
+> NOTICE: Don't forget to use `urlencoded` body parser in your Express application if you are
+  using ResultURL handler with `POST` requests.
+
 
 ## API
 
