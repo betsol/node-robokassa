@@ -16,6 +16,7 @@
 - Highly customizable
 - Object-oriented interface with code in ES6 and promises support
 - Very lightweight with minimal dependencies
+- Integrates easily with Express framework
 
 
 ## Installation
@@ -77,8 +78,8 @@ const paymentUrl = robokassaHelper.generatePaymentUrl(outSum, invDesc, options);
 
 // 3. HANDLING "ResultURL" CALLBACK REQUEST
 
-module.exports = function (req, res) {
-
+app.post('/robokassa/callback', function (req, res) {
+                                
   robokassaHelper.handleResultUrlRequest(req, res, function (values, userData) {
     
     console.log({
