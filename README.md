@@ -14,7 +14,7 @@
 - Supports custom transaction parameters (handles `Shp_` prefixes automatically for you)
 - Supports "test" mode
 - Highly customizable
-- Object-oriented interface with code in ES6
+- Object-oriented interface with code in ES6 and promises support
 - Very lightweight with minimal dependencies
 
 
@@ -80,10 +80,18 @@ const paymentUrl = robokassaHelper.generatePaymentUrl(outSum, invDesc, options);
 module.exports = function (req, res) {
 
   robokassaHelper.handleResultUrlRequest(req, res, function (values, userData) {
+    
     console.log({
       values: values, // Will contain general values like "invId" and "outSum"
       userData: userData // Will contain all your custom data passed previously, e.g.: "productId"
     });
+    
+    // You could return "false" here in order to throw error instead of success to Robokassa.
+    // return false;
+    
+    // You could also return promise here.
+    // return Promise.resolve();
+    
   });
 
 };
