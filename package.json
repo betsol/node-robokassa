@@ -1,0 +1,17 @@
+{
+  "name": "node-robokassa",
+  "version": "0.0.0",
+  "description": "Robokassa API integration for Node.js",
+  "main": "index.js",
+  "author": "Slava Fomin II <s.fomin@betsol.ru>",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "keywords": [
+    "robokassa",
+    "billing",
+    "payment"
+  ]
+}
