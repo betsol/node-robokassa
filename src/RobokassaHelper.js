@@ -138,10 +138,12 @@ class RobokassaHelper {
       values = values.concat(userData.sort());
     }
 
-    return this.calculateHash(
+    let hash = this.calculateHash(
       values.join(':')
     );
-
+    console.log(`Values: ${values.join(':')}`)
+    console.log(`Hash: ${hash}`)
+    return hash;
   }
 
   /**
