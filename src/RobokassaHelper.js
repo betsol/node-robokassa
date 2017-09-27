@@ -3,7 +3,16 @@ const crypto = require('crypto');
 const url = require('url');
 const _ = require('lodash');
 const Promise = require('bluebird');
+const https = require('https');
+const xml2js = require('xml2js');
 
+var parser = new xml2js.Parser({
+  trim:true,
+  normalize:true,
+  normalizeTags:true,
+  explicitRoot:false
+});
+parseString = parser.parseString;
 
 const DEFAULT_CONFIG = {
 
@@ -129,10 +138,12 @@ class RobokassaHelper {
       values = values.concat(userData.sort());
     }
 
-    return this.calculateHash(
+    let hash = this.calculateHash(
       values.join(':')
     );
-
+    console.log(`Values: ${values.join(':')}`)
+    console.log(`Hash: ${hash}`)
+    return hash;
   }
 
   /**
@@ -279,6 +290,64 @@ class RobokassaHelper {
 
     return hash.digest('hex');
 
+  }
+
+  /**
+   * Returns your summ plus service commission
+   *
+   * @param {number} outSum
+   * @param {string} [lang=en]
+   * @param [callback]
+   *
+   */
+  calculateCommission (outSum,lang='en',callback){
+    return new Promise((resolve,reject)=>{
+      if(typeof lang==='function'){
+        callback=lang;
+        lang='en';
+      }
+      if(!callback){
+        callback = function(err,result){
+          if(err) return reject(err);
+          return resolve(result);
+        };
+      }
+      if(typeof outSum==='undefined') return callback(new TypeError());
+
+      let req = https.request(`https://auth.robokassa.ru/Merchant/WebService/Service.asmx/GetRates?MerchantLogin=${this.config.merchantLogin}&IncCurrLabel=&OutSum=${outSum}&Language=${lang}`,res=>{
+        let body = '';
+        res.setEncoding('utf8');
+        res.on('data',chunk => {body+=chunk});
+        res.on('end', () => {
+          parseString(body, (err,parsed)=>{
+            if(err) return callback(err);
+            try{
+              var result = parsed.groups[0].group.map(group=>{
+                return {
+                  code:group.$.Code,
+                  description:group.$.Description,
+                  items:group.items[0].currency.map(currency=>{
+                    return {
+                      label:currency.$.Label,
+                      alias:currency.$.Alias,
+                      name:currency.$.Name,
+                      minValue:currency.$.MinValue,
+                      maxValue:currency.$.MaxValue,
+                      incSum:currency.rate[0].$.IncSum
+                    }
+                  })
+                };
+              });
+            }catch(err){
+              return callback(err);
+            }
+            callback(null,result)
+          });
+        });
+      });
+      req.on('error',callback);
+      req.end();
+    })
   }
 
 }
