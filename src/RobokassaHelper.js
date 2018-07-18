@@ -70,6 +70,16 @@ class RobokassaHelper {
       values.InvId = options.invId;
     }
 
+    // IncCurrLabel.
+    if (options.incCurrLabel) {
+      values.IncCurrLabel = options.incCurrLabel;
+    }
+
+    // Receipt.
+    if (options.receipt) {
+      values.Receipt = JSON.stringify(options.receipt);
+    }
+
     // E-Mail.
     if (options.email) {
       values.Email = options.email;
