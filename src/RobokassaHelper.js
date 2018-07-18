@@ -120,7 +120,8 @@ class RobokassaHelper {
     let values = [
       this.config.merchantLogin,
       outSum,
-      (options && options.invId ? options.invId : '')
+      (options && options.invId ? options.invId : ''),
+      (options && options.receipt ? options.receipt : ''),
     ];
 
     if (options.outSumCurrency) {
