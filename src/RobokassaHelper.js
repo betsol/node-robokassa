@@ -121,11 +121,14 @@ class RobokassaHelper {
       this.config.merchantLogin,
       outSum,
       (options && options.invId ? options.invId : ''),
-      (options && options.receipt ? options.receipt : ''),
     ];
 
     if (options.outSumCurrency) {
       values.push(options.outSumCurrency);
+    }
+    
+    if (options.receipt) {
+      values.push(encodeURIComponent(options.receipt));
     }
 
     values.push(this.config.password1);
