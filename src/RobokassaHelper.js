@@ -70,6 +70,16 @@ class RobokassaHelper {
       values.InvId = options.invId;
     }
 
+    // IncCurrLabel.
+    if (options.incCurrLabel) {
+      values.IncCurrLabel = options.incCurrLabel;
+    }
+
+    // Receipt.
+    if (options.receipt) {
+      values.Receipt = JSON.stringify(options.receipt);
+    }
+
     // E-Mail.
     if (options.email) {
       values.Email = options.email;
@@ -110,11 +120,15 @@ class RobokassaHelper {
     let values = [
       this.config.merchantLogin,
       outSum,
-      (options && options.invId ? options.invId : '')
+      (options && options.invId ? options.invId : ''),
     ];
 
     if (options.outSumCurrency) {
       values.push(options.outSumCurrency);
+    }
+    
+    if (options.receipt) {
+      values.push(encodeURIComponent(options.receipt));
     }
 
     values.push(this.config.password1);
